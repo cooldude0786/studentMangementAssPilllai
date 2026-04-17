@@ -21,11 +21,15 @@ export const createStudent = async (req, res) => {
 
     const admissionNumber = generateAdmissionNumber();
     
-    // Normalize file path for consistent URL format (use forward slashes)
+    // Handle file upload (only in development with disk storage)
     let photoUrl = null;
-    if (req.file) {
+    if (req.file && req.file.filename) {
+      // Normalize file path for consistent URL format (use forward slashes)
       photoUrl = `uploads/${req.file.filename}`;
       console.log(`File uploaded: ${photoUrl}`);
+    } else if (req.file && process.env.NODE_ENV === "production") {
+      // On Vercel, file is in memory only - skip storing URL
+      console.log("File received but not stored on Vercel (use cloud storage for production)");
     }
 
     const student = await prisma.student.create({
@@ -94,8 +98,11 @@ export const updateStudent = async (req, res) => {
     };
     
     // Add photo URL if file was uploaded
-    if (req.file) {
+    if (req.file && req.file.filename) {
       updateData.photoUrl = `uploads/${req.file.filename}`;
+    } else if (req.file && process.env.NODE_ENV === "production") {
+      // On Vercel, file is in memory only - skip storing URL
+      console.log("File received but not stored on Vercel (use cloud storage for production)");
     }
 
     const updated = await prisma.student.update({

@@ -6,7 +6,11 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads"));
+
+// Only serve uploads directory in development
+if (process.env.NODE_ENV !== "production") {
+  app.use("/uploads", express.static("uploads"));
+}
 
 app.use("/api/students", studentRoutes);
 
