@@ -3,7 +3,7 @@ dotenv.config();
 
 import app from "./app.js";
 const PORT = 5000;
-app.get("/", (req, res) => {
+app.get("/health", (req, res) => {
   res.send("Welcome to the Student Management System API");
 });
 app.listen(PORT, () => {

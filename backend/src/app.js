@@ -12,6 +12,6 @@ if (process.env.NODE_ENV !== "production") {
   app.use("/uploads", express.static("uploads"));
 }
 
-app.use("/api/students", studentRoutes);
+app.use("/students", studentRoutes);
 
 export default app;
